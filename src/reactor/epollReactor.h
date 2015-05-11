@@ -33,6 +33,8 @@
 // Commad to exit
 #define CMD_EXIT "EXIT"
 
+using namespace std;
+
 class epollReactor {
 public:
 	epollReactor();
@@ -45,6 +47,8 @@ private:
 	int m_epollSize;
 	int m_listenQueue;
 	int m_bufSize;
+	// To store client's socket list
+	list<int>  m_clientsList;
 };
 
 #endif /* REACTOR_EPOLLREACTOR_H_ */

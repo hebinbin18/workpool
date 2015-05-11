@@ -6,7 +6,7 @@
  */
 
 #include "epollReactor.h"
-using namespace std;
+
 epollReactor::epollReactor() {
 	// TODO Auto-generated constructor stub
 	m_addr.sin_family = PF_INET;
@@ -21,14 +21,6 @@ epollReactor::epollReactor() {
 epollReactor::~epollReactor() {
 	// TODO Auto-generated destructor stub
 }
-
-
-// To store client's socket list
-list<int> clients_list;
-
-// for debug mode
-int DEBUG_MODE = 0;
-
 
 // Debug epoll_event
 void debug_epoll_event(epoll_event ev){
@@ -124,16 +116,14 @@ int epollReactor::start(){
 	while(1)
 	{
 		epoll_events_count = epoll_wait(epfd, events, m_epollSize, EPOLL_RUN_TIMEOUT);
-		if(DEBUG_MODE) printf("Epoll events count: %d\n", epoll_events_count);
+		 printf("-----Epoll events count: %d\n", epoll_events_count);
 		// setup tStart time
 		tStart = clock();
 
 		for(int i = 0; i < epoll_events_count ; i++)
 		{
-			if(DEBUG_MODE){
-				printf("events[%d].data.fd = %d\n", i, events[i].data.fd);
-				debug_epoll_event(events[i]);
-			}
+			printf("events[%d].data.fd = %d\n", i, events[i].data.fd);
+			debug_epoll_event(events[i]);
 			// EPOLLIN event for listener(new client connection)
 			if(events[i].data.fd == listener)
 			{
@@ -152,10 +142,10 @@ int epollReactor::start(){
 				epoll_ctl(epfd, EPOLL_CTL_ADD, client, &ev);
 
 				// save new descriptor to further use
-				clients_list.push_back(client); // add new connection to list of clients
-				if(DEBUG_MODE) printf("Add new client(fd = %d) to epoll and now clients_list.size = %d\n",
+				m_clientsList.push_back(client); // add new connection to list of clients
+				printf("Add new client(fd = %d) to epoll and now clients_list.size = %d\n",
 						client,
-						clients_list.size());
+						m_clientsList.size());
 
 				// send initial welcome message to client
 				bzero(message, m_bufSize);
