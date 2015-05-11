@@ -7,16 +7,17 @@
 //============================================================================
 
 #include <iostream>
+
 #include "smtp/CSmtp.h"
-#include "test/jsontest.h"
-#include "reactor/epollReactor.h"
+#include "test/json_test.h"
+#include "test/server_test.h"
 
 using namespace std;
 
 int main() {
 
-	epollReactor* server = new epollReactor();
-	server->start();
+//	encode_test();
+	server_test(	);
 
 	return 0;
 }
